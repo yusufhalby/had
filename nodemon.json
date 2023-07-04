@@ -1,0 +1,8 @@
+{
+    "env":{
+        "MONGO_USER":"hesham",
+        "MONGO_PASS":"root",
+        "MONGO_DEF_DB":"had",
+        "JWT_SECRET":""
+    }
+}
