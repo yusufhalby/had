@@ -34,7 +34,6 @@ exports.putDiagnose = (req, res, next) => {
 
 exports.getDiagnose = (req, res, next) => {
     const userId= req.params.userId;
-    console.log(userId);
     Diagnose.find({userId})
     .then(diagnose => {
         if(!diagnose){

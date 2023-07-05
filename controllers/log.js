@@ -51,8 +51,8 @@ exports.getLogs = (req, res, next) => {
 
 // Create a new log
 exports.postLog = (req, res, next) => {
+    const userId = req.userId;
     const { 
-        userId,
         heartRate, 
         SystolicBloodPressure, 
         DiastolicBloodPressure,

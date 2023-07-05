@@ -10,7 +10,7 @@ const express = require('express');
 
 const logController = require('../controllers/log');
 const diagnoseController = require('../controllers/diagnose');
-// const isAuth = require('../middleware/is-auth');
+const isAuth = require('../middleware/is-auth');
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.get('/ai/logs', logController.getAiLogs);
 
 router.get('/logs/:userId', logController.getLogs);
 
-router.post('/logs', logController.postLog);
+router.post('/logs', isAuth, logController.postLog);
 
 
 router.put('/ai/diagnose', diagnoseController.putDiagnose);

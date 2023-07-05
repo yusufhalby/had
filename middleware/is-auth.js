@@ -31,6 +31,5 @@ module.exports = (req, res, next) => {
         throw error;
     }
     req.userId = decodedToken.id;
-    req.isSuperAdmin = decodedToken.isSuperAdmin;
     next();
 };
