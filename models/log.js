@@ -15,6 +15,7 @@ const logSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
+    name: String,
     age: Number,
     sex: Number,
     height: Number,

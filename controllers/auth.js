@@ -90,13 +90,14 @@ exports.login = (req, res, next) => {
         }
         const token = jwt.sign({
             email: loadedUser.email,
+            name: loadedUser.name,
             id: loadedUser._id.toString()
         },
         'somesupersecretsecret',
         { expiresIn: '1y' }
         );
         console.log("successful");
-        res.status(200).json({token, userId: loadedUser._id.toString() });
+        res.status(200).json({token, name: loadedUser.name, userId: loadedUser._id.toString() });
     })
     .catch(err=>{
         if (!err.statusCode) {

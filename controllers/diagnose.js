@@ -34,7 +34,7 @@ exports.putDiagnose = (req, res, next) => {
 
 exports.getDiagnose = (req, res, next) => {
     const userId= req.params.userId;
-    Diagnose.find({userId})
+    Diagnose.findOne({userId})
     .then(diagnose => {
         if(!diagnose){
             const error = new Error('Could not find diagnose.');
@@ -42,6 +42,25 @@ exports.getDiagnose = (req, res, next) => {
             throw error;
         }
         res.status(200).json({message: 'diagnose fetched.', diagnose});
+    })
+    .catch(err=>{
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    });
+};
+exports.getAuthDiagnose = (req, res, next) => {
+    const userId= req.userId;
+    const name = req.name;
+    Diagnose.findOne({userId})
+    .then(diagnose => {
+        if(!diagnose){
+            const error = new Error('Could not find diagnose.');
+            error.statusCode = 404;
+            throw error;
+        }
+        res.status(200).json({message: 'diagnose fetched.', diagnose, name});
     })
     .catch(err=>{
         if (!err.statusCode) {
