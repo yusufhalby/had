@@ -27,4 +27,6 @@ router.put('/ai/diagnose', diagnoseController.putDiagnose);
 
 router.get('/diagnose/:userId', diagnoseController.getDiagnose)
 
+router.get('/diagnoses', diagnoseController.getAllDiagnose)
+
 module.exports = router;
