@@ -31,6 +31,7 @@ const logSchema = new Schema({
     temperature: Number,
     faint: Number,
     sleep: Number,
+    smoker: Number,
 
 },{ timestamps: true });
 

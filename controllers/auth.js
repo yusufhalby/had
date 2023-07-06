@@ -12,10 +12,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const {
-    validationResult
+    validationResult, Result
 } = require('express-validator');
 
 const User = require('../models/user');
+const Diagnose = require('../models/diagnose');
 
 
 //Handle user signup
@@ -37,6 +38,7 @@ exports.signup = (req, res, next) => {
     const weight = req.body.weight;
     const geneticDiabetes = req.body.geneticDiabetes;
     const geneticHeartDiseases = req.body.geneticHeartDiseases;
+    const smoker = req.body.smoker;
 
     bcrypt.hash(password, 10)
     .then(hashedPassword => {
@@ -49,12 +51,17 @@ exports.signup = (req, res, next) => {
             height,
             weight,
             geneticDiabetes,
-            geneticHeartDiseases
+            geneticHeartDiseases,
+            smoker
         });
         return user.save();
     })
+    .then(result => {
+        const diagnose = new Diagnose({userId: result._id});
+        return diagnose.save()
+    })
     .then(result =>{
-        res.status(201).json({message: 'User created.', userId: result._id});
+        res.status(201).json({message: 'User created.', userId: result.userId});
 
     })
     .catch(err=>{

@@ -1,17 +1,16 @@
+const { response } = require('express');
 const diagnose = require('../models/diagnose');
 const Diagnose = require('../models/diagnose');
 
 exports.putDiagnose = (req, res, next) => {
     const {userId, diagnose} = req.body;
-    let newDiagnose;
+    //let newDiagnose;
     Diagnose.findOne({userId})
     .then(diagnoseLog => {
         if(!diagnoseLog){
-            newDiagnose = new Diagnose({
-                userId,
-                diagnose
-            });
-            return newDiagnose.save();
+            const error = new Error('Could not find diagnose.');
+            error.statusCode = 404;
+            throw error;
         }
     diagnoseLog.diagnose = diagnose;
     diagnoseLog.markModified('diagnose');

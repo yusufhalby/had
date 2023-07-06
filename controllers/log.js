@@ -50,28 +50,25 @@ exports.getLogs = (req, res, next) => {
 };
 exports.getAvgLogs = (req, res, next) => {
     const userId= req.userId;
-    let avgHR, avgHRV, avgSBP, avgDBP, avgRR, avgSpO2, avgTemp;
+    let avgHR=0, avgHRV=0, avgSBP=0, avgDBP=0, avgRR=0, avgSpO2=0, avgTemp=0;
     let sumHR=0, sumHRV=0, sumSBP=0, sumDBP=0, sumRR=0, sumSpO2=0, sumTemp=0;
     
     Log.find({userId})
     .then(logs => {
         if(!logs){
-            const error = new Error('Could not find logs.');
-            error.statusCode = 404;
-            throw error;
+            res.status(200).json({message: 'logs not found.', average: {avgHR, avgHRV, avgSBP, avgDBP, avgRR, avgSpO2, avgTemp}});
         }
         //res.status(200).json({message: 'logs fetched.', logs});
-        console.log(logs[0].systolic_BP);
         console.log(sumSBP);
         const length = logs.length;
         for (let i = 0; i < length; i++) {
-            sumHR +=logs[i].HR || 1;
-            sumHRV +=logs[i].HRV || 1;
-            sumSBP +=logs[i].systolic_BP || 1;
-            sumDBP +=logs[i].diastolic_BP || 1;
-            sumRR +=logs[i].RR || 1;
-            sumSpO2 +=logs[i].SpO2 || 1;
-            sumTemp +=logs[i].temperature || 1;
+            sumHR +=logs[i].HR || 80;
+            sumHRV +=logs[i].HRV || 80;
+            sumSBP +=logs[i].systolic_BP || 120;
+            sumDBP +=logs[i].diastolic_BP || 80;
+            sumRR +=logs[i].RR || 15;
+            sumSpO2 +=logs[i].SpO2 || 97;
+            sumTemp +=logs[i].temperature || 37;
           }
           console.log(sumSBP);
            avgHR =  Math.floor(sumHR / length);
@@ -81,6 +78,7 @@ exports.getAvgLogs = (req, res, next) => {
            avgRR = Math.floor(sumRR / length);
            avgSpO2 = Math.floor(sumSpO2 / length);
            avgTemp = Math.floor(sumTemp / length);
+           console.log(avgSBP);
             res.status(200).json({message: 'logs fetched.', average: {avgHR, avgHRV, avgSBP, avgDBP, avgRR, avgSpO2, avgTemp}});
 
     })
@@ -97,8 +95,8 @@ exports.postLog = (req, res, next) => {
     const userId = req.userId;
     const { 
         heartRate, 
-        SystolicBloodPressure, 
-        DiastolicBloodPressure,
+        systolicBloodPressure, 
+        diastolicBloodPressure,
         heartRateVariability, 
         saturationPerOxygen,
         temperature,
@@ -107,7 +105,7 @@ exports.postLog = (req, res, next) => {
         sleep
     } = req.body
 
-    let name, age, sex, height, weight, geneticDiabetes, geneticHeartDiseases, HR, HRV, systolic_BP, diastolic_BP, RR, SpO2;
+    let name, age, sex, height, weight, geneticDiabetes, geneticHeartDiseases, HR, HRV, systolic_BP, diastolic_BP, RR, SpO2, smoker;
     let log;
 
     User
@@ -125,10 +123,11 @@ exports.postLog = (req, res, next) => {
         weight = user.weight;
         if(user.geneticDiabetes){geneticDiabetes=1}else{geneticDiabetes=0};
         if(user.geneticHeartDiseases){geneticHeartDiseases=1}else{geneticHeartDiseases=0};
+        if(user.smoker){smoker=1}else{smoker=0};
         HR = heartRate;
         HRV = heartRateVariability;
-        systolic_BP = SystolicBloodPressure;
-        diastolic_BP = DiastolicBloodPressure;
+        systolic_BP = systolicBloodPressure;
+        diastolic_BP = diastolicBloodPressure;
         RR = respirationRate;
         SpO2 = saturationPerOxygen;
         log = new Log({
@@ -149,6 +148,7 @@ exports.postLog = (req, res, next) => {
             temperature,
             faint,
             sleep,
+            smoker,
         });
         return log.save()
     })

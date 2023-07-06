@@ -15,7 +15,10 @@ const diagnoseSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
-    diagnose: String
+    diagnose: {
+        type: String,
+        default: 'Not diagnosed yet',
+    }
 
 },{ timestamps: true });
 

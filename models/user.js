@@ -21,6 +21,7 @@ const userSchema = new Schema({
     weight: Number,
     geneticDiabetes: Boolean,
     geneticHeartDiseases: Boolean,
+    smoker: Boolean,
 });
 
 // Export the user model
