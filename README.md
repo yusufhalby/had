@@ -1,6 +1,1 @@
-# HAD
-
-
-## Author
-
-Hesham Omar
+# Heart Attack Detector RESTful API
